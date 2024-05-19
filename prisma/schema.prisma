@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// model employee{
+//   id  Int @id @default(autoincrement())
+//   rfid String @db.VarChar(255)
+//   school_id String @db.VarChar(255)
+//   firstname String @db.VarChar(255)
+//   middlename String?
+//   lastname String @db.VarChar(255)
+//   address String?
+//   gender String @db.VarChar(255)
+//   department String?
+//   employment_type String?
+//   profileUrl String?
+//   created_at DateTime @default(now())
+//   updated_at DateTime  @updatedAt
+
+  
+// }
+model Rooms {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255) @unique
+  imgUrl String?
+  isAvailable  Boolean    @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@fulltext([title])
+}
+
+model Equipments {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255) @unique
+  itemCount Int
+  imgUrl String?
+  isAvailable  Boolean    @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+}
