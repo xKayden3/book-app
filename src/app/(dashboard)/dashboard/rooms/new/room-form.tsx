@@ -19,8 +19,15 @@ import LoadingButton from '@/components/LoadingButton'
 // import { createEmployee } from './actions'
 import { Heading } from '../../../../../components/ui/heading'
 import { createRoom } from './actions'
+import { UploadedFilesCard } from '../components/uploaded-files-card'
+import { useUploadFile } from '@/hooks/use-upload-file'
+// import FileUpload from '@/components/file-uploader'
 
 export default function NewRoomForm() {
+  const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile(
+    'imageUploader',
+    { defaultUploadedFiles: [] }
+  )
   const form = useForm<CreateRoomValues>({
     resolver: zodResolver(createRoomSchema),
   })
@@ -68,6 +75,23 @@ export default function NewRoomForm() {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div>
+              {/* <FormField
+                control={form.control}
+                name='imgUrl'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Images</FormLabel>
+                    <FormControl>
+                      <FileUpload
+                        onChange={field.onChange}
+                        value={field.value}
+                        onRemove={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
               <FormField
                 control={control}
                 name='title'

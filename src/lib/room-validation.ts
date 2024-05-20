@@ -46,10 +46,6 @@ const ImgSchema = z.object({
 
 export const createRoomSchema = z.object({
   title: requiredString.max(100),
-  // imgUrl: z
-  //   .array(ImgSchema)
-  //   .max(IMG_MAX_LIMIT, { message: 'You can only add up to 3 images' })
-  //   .min(1, { message: 'At least one image must be added.' }),
 })
 
 export type CreateRoomValues = z.infer<typeof createRoomSchema>
@@ -57,9 +53,10 @@ export type CreateRoomValues = z.infer<typeof createRoomSchema>
 export const updateRoomSchema = z.object({
   id: z.number(),
   title: requiredString.max(100),
+  // imgUrl: z.array(z.instanceof(File)),
   // imgUrl: z
   //   .array(ImgSchema)
-  //   .max(IMG_MAX_LIMIT, { message: 'You can only add up to 3 images' })
+  //   .max(IMG_MAX_LIMIT, { message: 'You can only add up to 1 image' })
   //   .min(1, { message: 'At least one image must be added.' }),
 })
 
@@ -83,3 +80,12 @@ export type Room = {
   createdAt: Date
   updatedAt: Date
 }
+
+export const createBookRoomSchema = z.object({
+  roomId: numericRequiredString.min(1),
+  bookDate: z.date(),
+  timeStart: z.date().nullable(),
+  timeEnd: z.string().time(),
+})
+
+export type CreateBookRoomValues = z.infer<typeof createBookRoomSchema>

@@ -35,3 +35,7 @@ export interface RoomItem {
   title: string
   icon?: keyof typeof Icons
 }
+
+import { type ClientUploadedFileData } from 'uploadthing/types'
+
+export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
