@@ -1,152 +1,129 @@
 'use client'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Heading } from '../ui/heading'
-import { Button } from '../ui/button'
-import { Separator } from '@radix-ui/react-separator'
+
+import { format } from 'date-fns'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
 import {
-  createBookRoomSchema,
-  CreateBookRoomValues,
-  createRoomSchema,
-} from '@/lib/room-validation'
-import { useForm } from 'react-hook-form'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from '../ui/form'
-import { Input } from '../ui/input'
-import { useToast } from '../ui/use-toast'
-import { useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import { TimePickerWrapper } from '../time-picker/time-picker-wrapper'
-import { TimePickerInput } from '../time-picker/time-picker-input'
-import { TimePicker12HourWrapper } from '../time-picker/time-picker-12hour-wrapper'
-import { Popover } from '@radix-ui/react-popover'
-import { PopoverContent, PopoverTrigger } from '../ui/popover'
-import { CalendarIcon } from '@radix-ui/react-icons'
-import { Calendar } from '../ui/calendar'
+} from '@/components/ui/form'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-import { cn } from '@/lib/utils'
-import { format } from 'date-fns'
-import { TimePicker } from '../time-picker/time-picker'
-import { DateTimePicker } from '../time-picker/date-time-picker'
+import { toast } from '@/components/ui/use-toast'
+import { TimePickerDemo } from '../time-picker/time-picker-demo'
+import { createBookRoom } from '@/app/(dashboard)/dashboard/book/rooms/[roomId]/actions'
+
+const formSchema = z.object({
+  roomId: z.number(),
+  dateTime: z.date(),
+})
 
 interface BookRoomProps {
-  roomId: number
+  params: {
+    roomId: number
+  }
 }
 
-function BookRoom(props: BookRoomProps) {
-  const roomId = props.roomId
+type FormSchemaType = z.infer<typeof formSchema>
 
-  const form = useForm<CreateBookRoomValues>({
-    resolver: zodResolver(createBookRoomSchema),
+export function DateTimePickerForm(props: BookRoomProps) {
+  const form = useForm<FormSchemaType>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      roomId: props.params.roomId,
+      dateTime: new Date(),
+    },
   })
-  const router = useRouter()
-  const { toast } = useToast()
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const {
-    handleSubmit,
-    watch,
-    trigger,
-    control,
-    setValue,
-    setFocus,
-    formState: { isSubmitting },
-  } = form
 
-  const onSubmit = async (data: CreateBookRoomValues) => {
+  async function onSubmit(values: FormSchemaType) {
+    const formData = new FormData()
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) {
+        formData.append(key, value)
+      }
+    })
+
     try {
-      setLoading(true)
-
-      console.log(data)
-      // router.refresh()
-      // router.push(`/dashboard/products`)
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'There was a problem with your request.',
-      })
-    } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'There was a problem with your request.',
-      })
-    } finally {
-      setLoading(false)
+      await createBookRoom(formData)
+    } catch (error) {
+      alert('Something went wrong, please try again.')
     }
+
+    // toast({
+    //   title: 'You submitted the following values:',
+    //   description: (
+    //     <pre>
+    //       {/* <code>{parseToDate}</code> */}
+    //       <code>{parseToDate}</code>
+    //     </pre>
+    //   ),
+    // })
   }
 
   return (
-    <>
-      <Separator />
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-8 w-full'
-        >
-          <div className='md:grid md:grid-cols-3 gap-8'>
-            <FormField
-              control={form.control}
-              name='bookDate'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor='datetime'>Date time</FormLabel>
-                  <FormControl>
-                    <DateTimePicker
-                      granularity='minute'
-                      jsDate={field.value}
-                      onJsDateChange={field.onChange}
+    <Form {...form}>
+      <form
+        className='flex items-end gap-4 justify-center'
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <FormField
+          control={form.control}
+          name='dateTime'
+          render={({ field }) => (
+            <FormItem className='flex flex-col'>
+              <FormLabel className='text-left'>DateTime</FormLabel>
+              <Popover>
+                <FormControl>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant='outline'
+                      className={cn(
+                        'w-[280px] justify-start text-left font-normal',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      <CalendarIcon className='mr-2 h-4 w-4' />
+                      {field.value ? (
+                        format(field.value, 'PPP HH:mm:ss')
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                </FormControl>
+                <PopoverContent className='w-auto p-0'>
+                  <Calendar
+                    mode='single'
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    initialFocus
+                  />
+                  <div className='p-3 border-t border-border'>
+                    <TimePickerDemo
+                      setDate={field.onChange}
+                      date={field.value}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='timeStart'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Time Start</FormLabel>
-                  <FormControl>
-                    {/* <Input
-                      disabled={loading}
-                      placeholder='Product description'
-                      {...field}
-                    /> */}
-                    <TimePicker value={field.value} onChange={setValue} />
-                    {/* <Input type='time' {...field} /> */}
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='timeEnd'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Time End</FormLabel>
-                  <FormControl>
-                    <Input type='time' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <Button disabled={loading} className='ml-auto' type='submit'>
-            {'Book Now'}
-          </Button>
-        </form>
-      </Form>
-    </>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </FormItem>
+          )}
+        />
+        <Button type='submit'>Submit</Button>
+      </form>
+    </Form>
   )
 }
-export default BookRoom

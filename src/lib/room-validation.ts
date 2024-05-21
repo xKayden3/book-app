@@ -82,10 +82,10 @@ export type Room = {
 }
 
 export const createBookRoomSchema = z.object({
-  roomId: numericRequiredString.min(1),
+  roomId: z.number(),
   bookDate: z.date(),
-  timeStart: z.date().nullable(),
-  timeEnd: z.string().time(),
+  // timeStart: z.date(),
+  // timeEnd: z.date(),
 })
 
 export type CreateBookRoomValues = z.infer<typeof createBookRoomSchema>

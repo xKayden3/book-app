@@ -106,7 +106,7 @@ export default function RoomUpdate(props: AdminButtonProps) {
                 control={control}
                 name='id'
                 render={({ field }) => (
-                  <FormItem className='grow'>
+                  <FormItem className='w-[240px]'>
                     <FormLabel>Room ID</FormLabel>
                     <FormControl>
                       <Input disabled placeholder={`${roomId}`} {...field} />

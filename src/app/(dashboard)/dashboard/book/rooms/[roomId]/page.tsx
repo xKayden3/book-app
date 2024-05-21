@@ -1,7 +1,7 @@
-import BookRoom from '@/components/rooms/room-book'
 import { Heading } from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
 import prisma from '@/lib/prisma'
+import { BookRoomForm } from './NewBookRoom'
 
 interface BookRoomProps {
   params: {
@@ -22,13 +22,13 @@ async function RoomBook(props: BookRoomProps) {
     <>
       <div className='flex-1 space-y-4  p-4 md:p-8 pt-6'>
         <div className='flex items-center justify-between'>
-          <Heading
-            title={roomDescription || `Common Room`}
-            description='Book Room'
-          />
+          <Heading title={'Book Room'} description='' />
         </div>
         <Separator />
-        <BookRoom roomId={roomId} />
+        <BookRoomForm
+          roomIds={props.params.roomId.toString()}
+          roomDesc={roomDescription || 'Common Room'}
+        />
       </div>
     </>
   )

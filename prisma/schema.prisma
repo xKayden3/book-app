@@ -8,21 +8,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model book_room {
+model bookRoom {
   id        Int       @id @default(autoincrement())
-  roomId    Int?
-  bookDate  DateTime? @db.Date
-  timeStart DateTime? @db.Time(0)
-  timeEnd   DateTime? @db.Time(0)
+  roomId    Int
+  bookDate  DateTime @db.Date
+  timeStart DateTime @db.DateTime(0)
+  timeEnd   DateTime @db.DateTime(0)
   isActive  Int       @default(1) @db.TinyInt
-  rooms     rooms?    @relation(fields: [roomId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_book_room_rooms_id")
 
-  @@index([roomId], map: "FK_book_room_rooms_id")
 }
 
 model equipments {
   id          Int      @id @default(autoincrement())
-  title       String   @unique(map: "Equipments_title_key") @db.VarChar(255)
+  title       String   @db.VarChar(255)
   itemCount   Int
   imgUrl      String?
   isAvailable Boolean  @default(false)
@@ -31,13 +29,12 @@ model equipments {
 }
 
 model rooms {
-  id          Int         @id @default(autoincrement())
-  title       String      @unique(map: "Rooms_title_key") @db.VarChar(255)
-  imgUrl      Bytes?      @db.Blob
-  isAvailable Boolean     @default(true)
-  createdAt   DateTime    @default(now())
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  imgUrl      Bytes?   @db.Blob
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
   updatedAt   DateTime
-  book_room   book_room[]
 
-  @@fulltext([title], map: "Rooms_title_idx")
+  @@fulltext([title])
 }
