@@ -23,7 +23,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { toast } from '@/components/ui/use-toast'
-import { createBookRoom } from '@/app/(dashboard)/dashboard/book/rooms/[roomId]/actions'
+import { createBookRoom } from '@/app/(dashboard)/dashboard/book/rooms/new/[roomId]/actions'
 import { TimePickerDemo } from '@/components/time-picker/time-picker-demo'
 import { Input } from '@/components/ui/input'
 import { Heading } from '@/components/ui/heading'
@@ -40,6 +40,9 @@ interface BookRoomProps {
 export function BookRoomForm(props: BookRoomProps) {
   const form = useForm<CreateBookRoomValues>({
     resolver: zodResolver(createBookRoomSchema),
+    defaultValues: {
+      roomId: props.roomIds,
+    },
   })
 
   const paramRoomId = props.roomIds
@@ -64,15 +67,15 @@ export function BookRoomForm(props: BookRoomProps) {
       }
     })
 
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre>
-          {/* <code>{parseToDate}</code> */}
-          <code>{values.roomId}</code>
-        </pre>
-      ),
-    })
+    // toast({
+    //   title: 'You submitted the following values:',
+    //   description: (
+    //     <pre>
+    //       {/* <code>{parseToDate}</code> */}
+    //       <code>{values.roomId}</code>
+    //     </pre>
+    //   ),
+    // })
 
     try {
       await createBookRoom(formData)
@@ -102,6 +105,7 @@ export function BookRoomForm(props: BookRoomProps) {
                     <FormLabel>Room ID</FormLabel>
                     <FormControl>
                       <Input
+                        type='number'
                         disabled
                         placeholder={`${paramRoomId}`}
                         {...field}

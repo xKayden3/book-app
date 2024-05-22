@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  previewFeatures = ["fullTextIndex", "fullTextSearch", "views", "relationJoins"]
 }
 
 datasource db {
@@ -8,33 +8,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model bookRoom {
-  id        Int       @id @default(autoincrement())
+model bookroom {
+  id        Int      @id @default(autoincrement())
   roomId    Int
-  bookDate  DateTime @db.Date
+  bookDate  DateTime @db.DateTime(0)
   timeStart DateTime @db.DateTime(0)
   timeEnd   DateTime @db.DateTime(0)
-  isActive  Int       @default(1) @db.TinyInt
+  isActive  Int      @default(1) @db.TinyInt
+  isDone    Int      @default(0) @db.TinyInt
+  rooms     rooms    @relation(fields: [roomId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_bookroom_rooms_id")
 
+  @@index([roomId], map: "FK_bookroom_rooms_id")
 }
 
 model equipments {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
   itemCount   Int
   imgUrl      String?
-  isAvailable Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
+  isAvailable Boolean   @default(false)
+  createdAt   DateTime  @db.DateTime(0)
+  updatedAt   DateTime? @db.DateTime(0)
 }
 
 model rooms {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  imgUrl      Bytes?   @db.Blob
-  isAvailable Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
+  id          Int        @id @default(autoincrement())
+  title       String     @db.VarChar(255)
+  imgUrl      Bytes?     @db.Blob
+  isAvailable Boolean    @default(true)
+  createdAt   DateTime   @default(dbgenerated("(now())")) @db.DateTime(0)
+  updatedAt   DateTime?  @db.DateTime(0)
+  bookroom    bookroom[]
 
-  @@fulltext([title])
+  @@fulltext([title], map: "Rooms_title_idx")
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view viewbookings {
+  id        Int      @unique @default(0)
+  title     String   @db.VarChar(255)
+  bookDate  DateTime @db.DateTime(0)
+  timeStart DateTime @db.DateTime(0)
+  timeEnd   DateTime @db.DateTime(0)
 }

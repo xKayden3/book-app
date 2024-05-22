@@ -64,7 +64,8 @@ export type UpdateRoomValues = z.infer<typeof updateRoomSchema>
 
 export const roomFilterSchema = z.object({
   q: z.string().optional(),
-  title: z.string().optional(),
+  bookDate: z.coerce.string().optional(),
+  timeStart: z.string().time(),
   // department: z.string().optional(),
   // boolean
   // remote: z.coerce.boolean().optional()
@@ -82,8 +83,8 @@ export type Room = {
 }
 
 export const createBookRoomSchema = z.object({
-  roomId: z.number(),
-  bookDate: z.date(),
+  roomId: numericRequiredString,
+  bookDate: z.coerce.date(),
   // timeStart: z.date(),
   // timeEnd: z.date(),
 })

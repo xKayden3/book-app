@@ -26,7 +26,7 @@ async function RoomBook(props: BookRoomProps) {
         </div>
         <Separator />
         <BookRoomForm
-          roomIds={props.params.roomId.toString()}
+          roomIds={props.params.roomId}
           roomDesc={roomDescription || 'Common Room'}
         />
       </div>

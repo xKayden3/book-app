@@ -23,7 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { toast } from '@/components/ui/use-toast'
 import { TimePickerDemo } from '../time-picker/time-picker-demo'
-import { createBookRoom } from '@/app/(dashboard)/dashboard/book/rooms/[roomId]/actions'
+import { createBookRoom } from '@/app/(dashboard)/dashboard/book/rooms/new/[roomId]/actions'
 
 const formSchema = z.object({
   roomId: z.number(),

@@ -32,9 +32,14 @@ function RoomList({ room: { id, title, imgUrl, isAvailable } }: RoomsProps) {
         <Image src={sampleImg} width={500} height={500} alt='Sample Room' />
         <div className='text-2xl font-bold'>{title}</div>
       </CardContent>
-      <CardFooter>
-        <Link href={`/dashboard/book/rooms/${id}`}>
+      <CardFooter className='flex justify-between'>
+        <Link href={`/dashboard/book/rooms/new/${id}`}>
           <Button className='w-full'>Book</Button>
+        </Link>
+        <Link href={`/dashboard/book/rooms/list/${id}`}>
+          <Button variant={'secondary'} className='w-full'>
+            View Bookings
+          </Button>
         </Link>
       </CardFooter>
     </Card>
