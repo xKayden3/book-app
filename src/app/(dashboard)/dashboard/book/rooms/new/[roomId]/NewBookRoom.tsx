@@ -137,7 +137,7 @@ export function BookRoomForm(props: BookRoomProps) {
                           >
                             <CalendarIcon className='mr-2 h-4 w-4' />
                             {field.value ? (
-                              format(field.value, 'PPP HH:mm:ss')
+                              format(field.value, 'PPP')
                             ) : (
                               <span>Pick a date</span>
                             )}
@@ -151,19 +151,30 @@ export function BookRoomForm(props: BookRoomProps) {
                           onSelect={field.onChange}
                           initialFocus
                         />
-                        <div className='p-3 border-t border-border'>
-                          <TimePickerDemo
-                            setDate={field.onChange}
-                            date={field.value}
-                          />
-                        </div>
                       </PopoverContent>
                     </Popover>
                   </FormItem>
                 )}
               />
             </div>
-
+            <div>
+              <FormField
+                control={control}
+                name='timeStart'
+                render={({ field }) => (
+                  <FormItem className='w-[320px]'>
+                    <FormLabel>Room ID</FormLabel>
+                    <FormControl>
+                      <TimePickerDemo
+                        setDate={field.onChange}
+                        date={field.value}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <Button type='submit'>Submit</Button>
           </form>
         </Form>

@@ -11,7 +11,7 @@ datasource db {
 model bookroom {
   id        Int      @id @default(autoincrement())
   roomId    Int
-  bookDate  DateTime @db.DateTime(0)
+  bookDate  DateTime @db.Date
   timeStart DateTime @db.DateTime(0)
   timeEnd   DateTime @db.DateTime(0)
   isActive  Int      @default(1) @db.TinyInt
@@ -24,10 +24,9 @@ model bookroom {
 model equipments {
   id          Int       @id @default(autoincrement())
   title       String    @db.VarChar(255)
-  itemCount   Int
   imgUrl      String?
-  isAvailable Boolean   @default(false)
-  createdAt   DateTime  @db.DateTime(0)
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime  @default(now()) @db.DateTime(0)
   updatedAt   DateTime? @db.DateTime(0)
 }
 
@@ -45,9 +44,9 @@ model rooms {
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view viewbookings {
-  id        Int      @unique @default(0)
-  title     String   @db.VarChar(255)
-  bookDate  DateTime @db.DateTime(0)
-  timeStart DateTime @db.DateTime(0)
-  timeEnd   DateTime @db.DateTime(0)
+  id        Int     @unique @default(0)
+  title     String  @db.VarChar(255)
+  bookDate  String? @db.VarChar(139)
+  timeStart String? @db.VarChar(11)
+  timeEnd   String? @db.VarChar(11)
 }

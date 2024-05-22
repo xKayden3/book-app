@@ -85,7 +85,7 @@ export type Room = {
 export const createBookRoomSchema = z.object({
   roomId: numericRequiredString,
   bookDate: z.coerce.date(),
-  // timeStart: z.date(),
+  timeStart: z.coerce.date(),
   // timeEnd: z.date(),
 })
 
