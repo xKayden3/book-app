@@ -22,7 +22,7 @@ function EquipmentsList({
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle className='text-2xl font-bold'>{title}</CardTitle>
       </CardHeader>
-      <CardContent className='space-y-2'>
+      <CardContent className='flex space-y-2 items-center justify-center'>
         <Image src={sampleImg} width={500} height={500} alt='Sample Room' />
       </CardContent>
       <CardFooter className='flex justify-between'>

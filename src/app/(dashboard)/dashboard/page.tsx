@@ -64,6 +64,11 @@ export default function DashboardPage() {
                     +201 since last hour
                   </p> */}
                 </CardContent>
+                <CardFooter>
+                  <Link href={'/dashboard/book/equipments'}>
+                    <Button className='w-full'>Proceed</Button>
+                  </Link>
+                </CardFooter>
               </Card>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>

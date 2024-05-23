@@ -29,6 +29,7 @@ async function page() {
       isAvailable: false,
     },
   })
+
   return (
     <ScrollArea className='h-full'>
       <div className='flex-1 space-y-4 p-4 md:p-8 pt-6'>
@@ -50,20 +51,17 @@ async function page() {
                 <EquipmentsList equipment={equipment} key={equipment.id} />
               ))}
               {equipmentAvailable.length === 0 && (
-                <p className='m-auto text-center'>
-                  No equipment available found
-                </p>
+                <p className='m-auto text-center'>No equipment found</p>
               )}
             </div>
           </TabsContent>
           <TabsContent value='notAvailable' className='space-y-4'>
-            {equipmentsNotAvailable.map((equipment) => (
-                <EquipmentsList equipment={equipment} key={equipment.id} />
+            <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
+              {equipmentsNotAvailable.map((equipment) => (
+                <RoomsList equipment={equipment} key={equipment.id} />
               ))}
               {equipmentsNotAvailable.length === 0 && (
-                <p className='m-auto text-center'>
-                  No equipment available found
-                </p>
+                <p className='m-auto text-center'>No equipment found</p>
               )}
             </div>
           </TabsContent>

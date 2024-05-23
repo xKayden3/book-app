@@ -32,21 +32,26 @@ import {
   createBookRoomSchema,
   CreateBookRoomValues,
 } from '@/lib/room-validation'
+import {
+  createBookEquipmentSchema,
+  CreateBookEquipmentValues,
+  createEquipmentSchema,
+} from '@/lib/equipments-validations'
 
-interface BookRoomProps {
-  roomIds: number
-  roomDesc: string
+interface BookEquipmentProps {
+  equipmentId: number
+  equipmentDesc: string
 }
 
-export function BookRoomForm(props: BookRoomProps) {
-  const form = useForm<CreateBookRoomValues>({
-    resolver: zodResolver(createBookRoomSchema),
+export function BookEquipmentForm(props: BookEquipmentProps) {
+  const form = useForm<CreateBookEquipmentValues>({
+    resolver: zodResolver(createBookEquipmentSchema),
     defaultValues: {
-      roomId: props.roomIds,
+      equipmentId: props.equipmentId.toString(),
     },
   })
 
-  const paramRoomId = props.roomIds
+  const paramEquipmentId = props.equipmentId
 
   const {
     handleSubmit,
@@ -58,10 +63,10 @@ export function BookRoomForm(props: BookRoomProps) {
     formState: { isSubmitting },
   } = form
 
-  async function onSubmit(values: CreateBookRoomValues) {
+  async function onSubmit(values: CreateBookEquipmentValues) {
     const formData = new FormData()
 
-    const parsed = createBookRoomSchema.parse(values)
+    const parsed = createEquipmentSchema.parse(values)
     Object.entries(values).forEach(([key, value]) => {
       if (value) {
         formData.append(key, value)
@@ -88,19 +93,18 @@ export function BookRoomForm(props: BookRoomProps) {
   return (
     <main className='max-w-fit m-auto my-10 space-y-10'>
       <div className='space-y-5 text-center'>
-        <Heading title={props.roomDesc} description=''></Heading>
+        <Heading title={props.equipmentDesc} description=''></Heading>
       </div>
       <div className='space-y-6 border rounded-md p-4'>
         <div>
           <h2 className='font-semibold'>Select Date and Time of Booking</h2>
-          {/* <p className='text-muted-foreground'>Time Format is 24 HR</p> */}
         </div>
         <Form {...form}>
           <form className='space-y-5 ' onSubmit={form.handleSubmit(onSubmit)}>
             <div>
               <FormField
                 control={control}
-                name='roomId'
+                name='equipmentId'
                 render={({ field }) => (
                   <FormItem className='w-[320px]'>
                     <FormLabel>Room ID</FormLabel>
@@ -108,7 +112,7 @@ export function BookRoomForm(props: BookRoomProps) {
                       <Input
                         type='number'
                         disabled
-                        placeholder={`${paramRoomId}`}
+                        placeholder={`${paramEquipmentId}`}
                         {...field}
                       />
                     </FormControl>
@@ -123,7 +127,9 @@ export function BookRoomForm(props: BookRoomProps) {
                 name='bookDate'
                 render={({ field }) => (
                   <FormItem className='flex flex-col '>
-                    <FormLabel className='text-left'>Select Date</FormLabel>
+                    <FormLabel className='text-left'>
+                      Select Date and Time
+                    </FormLabel>
                     <Popover>
                       <FormControl>
                         <PopoverTrigger asChild>
