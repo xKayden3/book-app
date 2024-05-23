@@ -22,7 +22,7 @@ interface CellActionProps {
 }
 
 interface AdminButtonProps {
-  roomId: number
+  equipmentId: number
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -63,22 +63,22 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       </DropdownMenu> */}
       <div className='flex items-center space-x-4'>
         <Button
-          onClick={() => router.push(`/dashboard/equipment/update/${data.id}`)}
+          onClick={() => router.push(`/dashboard/equipments/update/${data.id}`)}
         >
           Update
         </Button>
-        <DeleteRoomButton roomId={data.id} />
+        <DeleteRoomButton equipmentId={data.id} />
       </div>
     </>
   )
 }
 
-function DeleteRoomButton({ roomId }: AdminButtonProps) {
+function DeleteRoomButton({ equipmentId }: AdminButtonProps) {
   const [formState, formAction] = useFormState(deleteRoom, undefined)
 
   return (
     <form action={formAction} className='space-y-1'>
-      <input hidden name='roomId' value={roomId} />
+      <input hidden name='roomId' value={equipmentId} />
       <FormSubmitButton className=' bg-red-500 hover:bg-red-600'>
         Delete
       </FormSubmitButton>

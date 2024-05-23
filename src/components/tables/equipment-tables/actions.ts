@@ -26,13 +26,13 @@ type FormState = { error?: string } | undefined
 
 export async function deleteRoom(prevState: FormState, formData: FormData) {
   try {
-    const roomId = parseInt(formData.get('roomId') as string)
+    const equipmentId = parseInt(formData.get('equipmentId') as string)
 
-    await prisma.rooms.delete({
-      where: { id: roomId },
+    await prisma.equipments.delete({
+      where: { id: equipmentId },
     })
 
-    revalidatePath('/dashboard/rooms')
+    revalidatePath('/dashboard/equipments')
   } catch (error) {
     let message = 'Unexpected error'
     if (error instanceof Error) {
@@ -41,5 +41,5 @@ export async function deleteRoom(prevState: FormState, formData: FormData) {
     return { error: message }
   }
 
-  redirect('/dashboard/rooms')
+  redirect('/dashboard/equipments')
 }
