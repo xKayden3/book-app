@@ -70,3 +70,10 @@ export function composeEventHandlers<E>(
     }
   }
 }
+
+export function toSlug(str: string) {
+  return str
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')
+}

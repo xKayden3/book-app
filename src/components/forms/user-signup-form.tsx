@@ -24,7 +24,7 @@ const formSchema = z.object({
 
 type UserFormValue = z.infer<typeof formSchema>
 
-export default function UserAuthForm() {
+export default function UserSignUp() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl')
   const [loading, setLoading] = useState(false)
@@ -87,12 +87,12 @@ export default function UserAuthForm() {
             )}
           />
           <Button disabled={loading} className='ml-auto w-full' type='submit'>
-            Continue With Email
+            Sign Up
           </Button>
         </form>
       </Form>
 
-      <div className='relative'>
+      {/* <div className='relative'>
         <div className='absolute inset-0 flex items-center'>
           <span className='w-full border-t' />
         </div>
@@ -101,7 +101,7 @@ export default function UserAuthForm() {
             Or continue with
           </span>
         </div>
-      </div>
+      </div> */}
       <GoogleSignInButton />
     </>
   )

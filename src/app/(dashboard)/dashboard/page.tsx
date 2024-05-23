@@ -1,4 +1,6 @@
 import { CalendarDateRangePicker } from '@/components/date-range-picker'
+import { Overview } from '@/components/overview'
+import { RecentSales } from '@/components/recent-sales'
 // import { Overview } from '@/components/overview'
 // import { RecentSales } from '@/components/recent-sales'
 import { Button } from '@/components/ui/button'
@@ -84,7 +86,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </div>
-            {/* <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7'>
+            <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7'>
               <Card className='col-span-4'>
                 <CardHeader>
                   <CardTitle>Overview</CardTitle>
@@ -95,16 +97,16 @@ export default function DashboardPage() {
               </Card>
               <Card className='col-span-4 md:col-span-3'>
                 <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
+                  <CardTitle>Recent Booking</CardTitle>
                   <CardDescription>
-                    You made 265 sales this month.
+                    {/* You made 265 sales this month. */}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <RecentSales />
                 </CardContent>
               </Card>
-            </div> */}
+            </div>
           </TabsContent>
         </Tabs>
       </div>

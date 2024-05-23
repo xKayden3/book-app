@@ -17,7 +17,7 @@ const emailSchema = z
   })
 
 // for profile avatar
-const profileLogoSchema = z
+const imgSchema = z
   .custom<File | undefined>()
   .refine(
     (file) => !file || (file instanceof File && file.type.startsWith('image/')),
@@ -46,6 +46,7 @@ const ImgSchema = z.object({
 
 export const createRoomSchema = z.object({
   title: requiredString.max(100),
+  imgUrl: imgSchema,
 })
 
 export type CreateRoomValues = z.infer<typeof createRoomSchema>

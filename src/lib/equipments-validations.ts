@@ -18,3 +18,12 @@ export const createEquipmentSchema = z.object({
 })
 
 export type CreateEquipmentValues = z.infer<typeof createEquipmentSchema>
+
+export type Equipment = {
+  id: number
+  title: string
+  imgUrl: string | null
+  isAvailable: boolean
+  createdAt: Date
+  updatedAt: Date
+}

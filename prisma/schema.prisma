@@ -33,7 +33,7 @@ model equipments {
 model rooms {
   id          Int        @id @default(autoincrement())
   title       String     @db.VarChar(255)
-  imgUrl      Bytes?     @db.Blob
+  imgUrl      String?    
   isAvailable Boolean    @default(true)
   createdAt   DateTime   @default(dbgenerated("(now())")) @db.DateTime(0)
   updatedAt   DateTime?  @db.DateTime(0)
@@ -49,4 +49,13 @@ view viewbookings {
   bookDate  String? @db.VarChar(139)
   timeStart String? @db.VarChar(11)
   timeEnd   String? @db.VarChar(11)
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  name     String?
+  email    String   @unique
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -105,6 +105,27 @@ export default function NewRoomForm() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={control}
+                name='imgUrl'
+                render={({ field: { value, ...fieldValues } }) => (
+                  <FormItem>
+                    <FormLabel>Image</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...fieldValues}
+                        type='file'
+                        accept='image/*'
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          fieldValues.onChange(file)
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <LoadingButton type='submit' loading={isSubmitting}>
