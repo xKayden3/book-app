@@ -21,16 +21,19 @@ async function EquipmentBook(props: BookEquipmentProps) {
 
   const equipmentDescription = equipment?.title
   return (
-    <div className='flex-1 space-y-4  p-4 md:p-8 pt-6'>
-      <div className='flex items-center justify-between'>
-        <Heading title={'Book Equipments'} description='' />
+    <ScrollArea className='h-full'>
+      <div className='flex-1 space-y-4  p-4 md:p-8 pt-6'>
+        <div className='flex items-center justify-between'>
+          <Heading title={'Book Equipments'} description='' />
+        </div>
+        <Separator />
+
+        <BookEquipmentForm
+          equipmentId={props.params.equipmentId}
+          equipmentDesc={equipmentDescription || 'Common Equipment'}
+        />
       </div>
-      <Separator />
-      <BookEquipmentForm
-        equipmentId={props.params.equipmentId}
-        equipmentDesc={equipmentDescription || 'Common Equipment'}
-      />
-    </div>
+    </ScrollArea>
   )
 }
 export default EquipmentBook

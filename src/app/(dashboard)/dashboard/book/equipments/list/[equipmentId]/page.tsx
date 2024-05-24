@@ -13,10 +13,10 @@ import { notFound } from 'next/dist/client/components/not-found'
 import { cache } from 'react'
 
 interface PageProps {
-  params: { roomId: number }
+  params: { equipmentId: number }
 }
 
-const getBookings = cache(async (roomId: number) => {
+const getBookings = cache(async (equipmentId: number) => {
   // const bookings = await prisma.rooms.findFirst({
   //   where: { id: roomId },
   //   select:{
@@ -31,9 +31,9 @@ const getBookings = cache(async (roomId: number) => {
   //   }
   // });
 
-  const bookings = await prisma.viewbookingsroom.findMany({
+  const bookings = await prisma.viewbookingsequipment.findMany({
     where: {
-      id: parseInt(roomId.toString()),
+      id: parseInt(equipmentId.toString()),
     },
   })
 
@@ -43,8 +43,10 @@ const getBookings = cache(async (roomId: number) => {
   return bookings
 })
 
-export async function Bookings({ params: { roomId } }: PageProps) {
-  const bookings = await getBookings(roomId)
+export async function BookingsEquipment({
+  params: { equipmentId },
+}: PageProps) {
+  const bookings = await getBookings(equipmentId)
 
   return (
     // <div>Booking List</div>
@@ -52,8 +54,15 @@ export async function Bookings({ params: { roomId } }: PageProps) {
       <TableCaption>Booking Records</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Date</TableHead>
+          <TableHead>Equipment</TableHead>
+          <TableHead>EDP Number</TableHead>
+          <TableHead>Course</TableHead>
+          <TableHead>Purpose</TableHead>
+          <TableHead>Contact No</TableHead>
+          <TableHead>Endorsed By</TableHead>
+          <TableHead>Book Date Start</TableHead>
           <TableHead>Time Start</TableHead>
+          <TableHead>Book Date End</TableHead>
           <TableHead>Time End</TableHead>
           {/* <TableHead className='text-right'>Amount</TableHead> */}
         </TableRow>
@@ -61,9 +70,16 @@ export async function Bookings({ params: { roomId } }: PageProps) {
       <TableBody>
         {bookings.map((booking) => (
           <TableRow key={booking.id}>
-            <TableCell className='font-medium'>{booking.bookDate}</TableCell>
+            <TableCell className='font-medium'>{booking.title}</TableCell>
+            <TableCell>{booking.edpNumber}</TableCell>
+            <TableCell>{booking.course}</TableCell>
+            <TableCell>{booking.purpose}</TableCell>
+            <TableCell>{booking.contactNo}</TableCell>
+            <TableCell>{booking.endorsedBy}</TableCell>
+            <TableCell>{booking.bookDateStart}</TableCell>
             <TableCell>{booking.timeStart}</TableCell>
-            <TableCell>{booking.timeEnd}</TableCell>
+            <TableCell>{booking.bookDateEnd}</TableCell>
+            <TableCell>{booking.timeStart}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -76,4 +92,4 @@ export async function Bookings({ params: { roomId } }: PageProps) {
     </Table>
   )
 }
-export default Bookings
+export default BookingsEquipment

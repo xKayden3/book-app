@@ -33,7 +33,7 @@ model equipments {
 model rooms {
   id          Int        @id @default(autoincrement())
   title       String     @db.VarChar(255)
-  imgUrl      String?    
+  imgUrl      String?
   isAvailable Boolean    @default(true)
   createdAt   DateTime   @default(dbgenerated("(now())")) @db.DateTime(0)
   updatedAt   DateTime?  @db.DateTime(0)
@@ -42,8 +42,34 @@ model rooms {
   @@fulltext([title], map: "Rooms_title_idx")
 }
 
+model bookequipments {
+  id            Int      @id @default(autoincrement())
+  equipmentId   Int
+  edpNumber     String
+  name          String
+  course        String
+  purpose       String?
+  contactNo     String?
+  endorsedBy    String?
+  bookDateStart DateTime @db.Date
+  timeStart     DateTime @db.DateTime(0)
+  bookDateEnd   DateTime @db.Date
+  timeEnd       DateTime @db.DateTime(0)
+  isActive      Int      @default(1) @db.TinyInt
+  isDone        Int      @default(0) @db.TinyInt
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String   @unique(map: "User_email_key")
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view viewbookings {
+view viewbookingsroom {
   id        Int     @unique @default(0)
   title     String  @db.VarChar(255)
   bookDate  String? @db.VarChar(139)
@@ -51,11 +77,20 @@ view viewbookings {
   timeEnd   String? @db.VarChar(11)
 }
 
-model User {
-  id       Int      @id @default(autoincrement())
-  name     String?
-  email    String   @unique
-  password String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view viewbookingsequipment {
+  id            Int      @unique @default(0)
+  title         String  @db.VarChar(255)
+  edpNumber     String
+  name          String
+  course        String
+  purpose       String
+  contactNo     String 
+  endorsedBy    String
+  bookDateStart String? @db.VarChar(139)
+  timeStart     String? @db.VarChar(11)
+  bookDateEnd   String? @db.VarChar(139)
+  timeEnd       String? @db.VarChar(11)
+
+  
 }

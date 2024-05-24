@@ -41,9 +41,16 @@ export type Equipment = {
 
 export const createBookEquipmentSchema = z.object({
   equipmentId: numericRequiredString,
-  bookDate: z.coerce.date(),
+  edpNumber: z.string(),
+  name: z.string(),
+  course: z.string(),
+  purpose: z.string(),
+  contactNo: z.string(),
+  endorsedBy: z.string(),
+  bookDateStart: z.coerce.date(),
   timeStart: z.coerce.date(),
-  // timeEnd: z.date(),
+  bookDateEnd: z.coerce.date(),
+  timeEnd: z.coerce.date(),
 })
 
 export type CreateBookEquipmentValues = z.infer<

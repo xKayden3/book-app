@@ -23,7 +23,12 @@ function EquipmentsList({
         <CardTitle className='text-2xl font-bold'>{title}</CardTitle>
       </CardHeader>
       <CardContent className='flex space-y-2 items-center justify-center'>
-        <Image src={sampleImg} width={500} height={500} alt='Sample Room' />
+        <Image
+          src={imgUrl ? imgUrl : sampleImg}
+          width={500}
+          height={500}
+          alt='Sample Room'
+        />
       </CardContent>
       <CardFooter className='flex justify-between'>
         <Link href={`/dashboard/book/equipments/new/${id}`}>

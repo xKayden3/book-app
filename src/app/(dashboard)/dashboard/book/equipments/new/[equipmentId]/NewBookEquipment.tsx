@@ -28,15 +28,13 @@ import { createBookRoom } from '@/app/(dashboard)/dashboard/book/rooms/new/[room
 import { TimePickerDemo } from '@/components/time-picker/time-picker-demo'
 import { Input } from '@/components/ui/input'
 import { Heading } from '@/components/ui/heading'
-import {
-  createBookRoomSchema,
-  CreateBookRoomValues,
-} from '@/lib/room-validation'
+import { useRouter } from 'next/navigation'
 import {
   createBookEquipmentSchema,
   CreateBookEquipmentValues,
   createEquipmentSchema,
 } from '@/lib/equipments-validations'
+import { createBookEquipments } from './actions'
 
 interface BookEquipmentProps {
   equipmentId: number
@@ -44,10 +42,17 @@ interface BookEquipmentProps {
 }
 
 export function BookEquipmentForm(props: BookEquipmentProps) {
+  const router = useRouter()
   const form = useForm<CreateBookEquipmentValues>({
     resolver: zodResolver(createBookEquipmentSchema),
     defaultValues: {
       equipmentId: props.equipmentId.toString(),
+      edpNumber: '',
+      name: '',
+      course: '',
+      purpose: '',
+      contactNo: '',
+      endorsedBy: '',
     },
   })
 
@@ -66,7 +71,7 @@ export function BookEquipmentForm(props: BookEquipmentProps) {
   async function onSubmit(values: CreateBookEquipmentValues) {
     const formData = new FormData()
 
-    const parsed = createEquipmentSchema.parse(values)
+    // const parsed = createEquipmentSchema.parse(values)
     Object.entries(values).forEach(([key, value]) => {
       if (value) {
         formData.append(key, value)
@@ -84,15 +89,15 @@ export function BookEquipmentForm(props: BookEquipmentProps) {
     // })
 
     try {
-      await createBookRoom(formData)
+      await createBookEquipments(formData)
     } catch (error) {
       alert('Something went wrong, please try again.')
     }
   }
 
   return (
-    <main className='max-w-fit m-auto my-10 space-y-10'>
-      <div className='space-y-5 text-center'>
+    <main className='max-w-fit m-auto my-10 space-y-8'>
+      <div className='space-y-2 text-center'>
         <Heading title={props.equipmentDesc} description=''></Heading>
       </div>
       <div className='space-y-6 border rounded-md p-4'>
@@ -100,7 +105,7 @@ export function BookEquipmentForm(props: BookEquipmentProps) {
           <h2 className='font-semibold'>Select Date and Time of Booking</h2>
         </div>
         <Form {...form}>
-          <form className='space-y-5 ' onSubmit={form.handleSubmit(onSubmit)}>
+          <form className='space-y-2 ' onSubmit={form.handleSubmit(onSubmit)}>
             <div>
               <FormField
                 control={control}
@@ -121,15 +126,142 @@ export function BookEquipmentForm(props: BookEquipmentProps) {
                 )}
               />
             </div>
-            <div>
+            <div className='flex justify-between space-x-5'>
               <FormField
                 control={control}
-                name='bookDate'
+                name='edpNumber'
+                render={({ field }) => (
+                  <FormItem className='w-[320px]'>
+                    <FormLabel>EDP Number</FormLabel>
+                    <FormControl>
+                      <Input type='text' placeholder={``} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem className='w-[320px]'>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='text'
+                        // placeholder={`BSIT, BSCS, BSA, ...etc`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className='flex justify-between space-x-5'>
+              <FormField
+                control={control}
+                name='course'
+                render={({ field }) => (
+                  <FormItem className='w-[320px]'>
+                    <FormLabel>Course</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='text'
+                        placeholder={`BSIT, BSCS, BSA, ...etc`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name='purpose'
+                render={({ field }) => (
+                  <FormItem className='grow'>
+                    <FormLabel>Purpose</FormLabel>
+                    <FormControl>
+                      <Input type='text' placeholder={``} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className='flex justify-between space-x-5'>
+              <FormField
+                control={control}
+                name='contactNo'
+                render={({ field }) => (
+                  <FormItem className='w-[320px]'>
+                    <FormLabel>Contact No</FormLabel>
+                    <FormControl>
+                      <Input type='text' placeholder={``} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name='endorsedBy'
+                render={({ field }) => (
+                  <FormItem className='w-[320px]'>
+                    <FormLabel>Endorsed By</FormLabel>
+                    <FormControl>
+                      <Input type='text' placeholder={``} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className='flex justify-between space-x-5'>
+              <FormField
+                control={control}
+                name='bookDateStart'
                 render={({ field }) => (
                   <FormItem className='flex flex-col '>
-                    <FormLabel className='text-left'>
-                      Select Date and Time
-                    </FormLabel>
+                    <FormLabel className='text-left'>Book Date Start</FormLabel>
+                    <Popover>
+                      <FormControl>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant='outline'
+                            className={cn(
+                              'w-[320px] justify-start text-left font-normal',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                          >
+                            <CalendarIcon className='mr-2 h-4 w-4' />
+                            {field.value ? (
+                              format(field.value, 'PPP')
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                      </FormControl>
+                      <PopoverContent className='w-auto p-0'>
+                        <Calendar
+                          mode='single'
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name='bookDateEnd'
+                render={({ field }) => (
+                  <FormItem className='flex flex-col '>
+                    <FormLabel className='text-left'>Book Date End</FormLabel>
                     <Popover>
                       <FormControl>
                         <PopoverTrigger asChild>
@@ -162,13 +294,30 @@ export function BookEquipmentForm(props: BookEquipmentProps) {
                 )}
               />
             </div>
-            <div>
+            <div className='flex justify-between space-x-5'>
               <FormField
                 control={control}
                 name='timeStart'
                 render={({ field }) => (
                   <FormItem className='w-[320px]'>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Time Start</FormLabel>
+                    <FormControl>
+                      <TimePickerDemo
+                        setDate={field.onChange}
+                        date={field.value}
+                      />
+                    </FormControl>
+                    <FormDescription>Time Format is 24 HR</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name='timeEnd'
+                render={({ field }) => (
+                  <FormItem className='w-[320px]'>
+                    <FormLabel>Time End</FormLabel>
                     <FormControl>
                       <TimePickerDemo
                         setDate={field.onChange}
@@ -181,7 +330,16 @@ export function BookEquipmentForm(props: BookEquipmentProps) {
                 )}
               />
             </div>
-            <Button type='submit'>Submit</Button>
+            <div className='flex justify-end space-x-4'>
+              <Button type='submit'>Submit</Button>
+              {/* <Button
+                variant={'destructive'}
+                className='text-xs md:text-sm'
+                onClick={() => router.push(`/dashboard/book/equipments`)}
+              >
+                Cancel
+              </Button> */}
+            </div>
           </form>
         </Form>
       </div>
